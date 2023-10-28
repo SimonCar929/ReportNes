@@ -1,0 +1,50 @@
+1) Bind Shell Backdoor
+Una shell è in ascolto sulla porta remota senza che sia richiesta alcuna autenticazione. Un utente malintenzionato può utilizzarla collegandosi alla porta remota e inviando direttamente i comandi.
+Soluzione
+Verificare se l'host remoto è stato compromesso e, se necessario, reinstallare il sistema.
+
+2) SSL  V 2/3
+Il servizio remoto accetta connessioni crittografate tramite SSL 2.0 e/o SSL 3.0. Queste versioni di SSL sono affette da diversi difetti crittografici, tra cui:
+
+- Uno schema di imbottitura insicuro con i cifrari CBC.
+
+- Schemi di rinegoziazione e ripresa della sessione non sicuri.
+
+Un aggressore può sfruttare queste falle per condurre attacchi man-in-the-middle o per decriptare le comunicazioni tra il servizio interessato e i client.
+
+Sebbene SSL/TLS disponga di un metodo sicuro per scegliere la versione più alta del protocollo supportata (in modo che queste versioni vengano utilizzate solo se il client o il server non supportano nulla di meglio), molti browser Web lo implementano in modo non sicuro, consentendo a un aggressore di declassare una connessione (come nel caso di POODLE). Pertanto, si raccomanda di disabilitare completamente questi protocolli.
+
+Il NIST ha stabilito che SSL 3.0 non è più accettabile per le comunicazioni sicure. A partire dalla data di applicazione prevista da PCI DSS v3.1, qualsiasi versione di SSL non soddisfa la definizione di "crittografia forte" del PCI SSC.
+Soluzione
+Consultare la documentazione dell'applicazione per disabilitare SSL 2.0 e 3.0.
+Utilizzare invece TLS 1.2 (con suite di cifratura approvate) o superiore.
+Vedere anche
+https://www.schneier.com/academic/paperfiles/paper-ssl.pdf
+http://www.nessus.org/u?b06c7e95
+http://www.nessus.org/u?247c4540
+https://www.openssl.org/~bodo/ssl-poodle.pdf
+http://www.nessus.org/u?5d15ba70
+https://www.imperialviolet.org/2014/10/14/poodle.html
+https://tools.ietf.org/html/rfc7507
+https://tools.ietf.org/html/rfc7568
+
+3) Unix
+
+Secondo il numero di versione dichiarato, il sistema operativo Unix in esecuzione sull'host remoto non è più supportato.
+
+La mancanza di supporto implica che il fornitore non rilascerà nuove patch di sicurezza per il prodotto. Di conseguenza, è probabile che contenga vulnerabilità di sicurezza.
+Soluzione
+Aggiornare a una versione del sistema operativo Unix attualmente supportata.
+
+4) SSL Check
+
+Il certificato x509 remoto sul server SSL remoto è stato generato su un sistema Debian o Ubuntu che contiene un bug nel generatore di numeri casuali della sua libreria OpenSSL.
+
+Il problema è dovuto alla rimozione da parte di un packager Debian di quasi tutte le fonti di entropia nella versione remota di OpenSSL.
+
+Un utente malintenzionato può facilmente ottenere la parte privata della chiave remota e usarla per decifrare la sessione remota o impostare un attacco man in the middle.
+Soluzione
+Considerare tutto il materiale crittografico generato sull'host remoto come indovinabile. In particolare, tutto il materiale delle chiavi SSH, SSL e OpenVPN deve essere rigenerato.
+Vedere anche
+http://www.nessus.org/u?107f9bdc
+http://www.nessus.org/u?f14f4224
